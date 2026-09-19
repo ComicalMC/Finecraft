@@ -3,19 +3,14 @@ plugins {
 }
 
 group = "net.minecraft"
-version = "a0.1.0"
+
+val versionFile = file("resources/version.txt").takeIf { it.exists() }
+    ?: file("src/main/resources/version.txt").takeIf { it.exists() }
+val appVersion = versionFile?.readText()?.trim()?.take(20) ?: "unknown"
+version = appVersion
 
 repositories {
     mavenCentral()
-}
-
-val osName = System.getProperty("os.name").lowercase()
-val osArch = System.getProperty("os.arch").lowercase()
-val lwjglNatives = when {
-    osName.contains("win") -> if (osArch.contains("aarch64")) "natives-windows-arm64" else "natives-windows"
-    osName.contains("linux") -> if (osArch.contains("aarch64")) "natives-linux-arm64" else "natives-linux"
-    osName.contains("mac") -> if (osArch.contains("aarch64")) "natives-macos-arm64" else "natives-macos"
-    else -> throw Error("Unsupported Platform: $osName")
 }
 
 java {
@@ -32,9 +27,18 @@ dependencies {
     implementation("org.lwjgl", "lwjgl-glfw")
     implementation("org.lwjgl", "lwjgl-opengl")
 
-    runtimeOnly("org.lwjgl", "lwjgl", classifier = lwjglNatives)
-    runtimeOnly("org.lwjgl", "lwjgl-glfw", classifier = lwjglNatives)
-    runtimeOnly("org.lwjgl", "lwjgl-opengl", classifier = lwjglNatives)
+    // compatibility
+    val platforms = listOf(
+        "natives-windows", "natives-windows-arm64",
+        "natives-linux", "natives-linux-arm64",
+        "natives-macos", "natives-macos-arm64"
+    )
+
+    for (platform in platforms) {
+        runtimeOnly("org.lwjgl", "lwjgl", classifier = platform)
+        runtimeOnly("org.lwjgl", "lwjgl-glfw", classifier = platform)
+        runtimeOnly("org.lwjgl", "lwjgl-opengl", classifier = platform)
+    }
 }
 
 tasks.register<JavaExec>("runClient") {
@@ -49,6 +53,7 @@ tasks.register<JavaExec>("runClient") {
 tasks.named<Wrapper>("wrapper") {
     distributionUrl = "gradle-9.0.0-bin.zip"
 }
+
 tasks.register<JavaExec>("runServer") {
     mainClass.set("server.Server")
     classpath = sourceSets["main"].runtimeClasspath
@@ -58,9 +63,15 @@ tasks.register<JavaExec>("runServer") {
 
 tasks.register<Jar>("buildServer") {
     group = "build"
-    archiveBaseName.set("mc-server")
-    archiveVersion.set(version.toString())
+    dependsOn("classes")
+
+    archiveFileName.set("Finecraft Server $appVersion.jar")
     destinationDirectory.set(project.layout.projectDirectory.dir("build/dist").asFile)
+
+    manifest {
+        attributes("Main-Class" to "server.Server")
+    }
+
     from(sourceSets["main"].output)
     from(
         configurations.runtimeClasspath.get()
@@ -75,12 +86,14 @@ tasks.register<Jar>("buildServer") {
 tasks.register<Jar>("buildClient") {
     group = "build"
     dependsOn("classes")
-    archiveBaseName.set("mc-client")
-    archiveVersion.set(version.toString())
+
+    archiveFileName.set("Finecraft Client $appVersion.jar")
     destinationDirectory.set(project.layout.projectDirectory.dir("build/dist").asFile)
+
     manifest {
         attributes("Main-Class" to "client.Minecraft")
     }
+
     from(sourceSets["main"].output)
     from(
         configurations.runtimeClasspath.get()
