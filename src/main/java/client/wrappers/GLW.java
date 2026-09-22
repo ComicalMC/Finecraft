@@ -12,10 +12,11 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 /**
- * This is a wrapper for OpenGL 3.3 CORE <br>
+ * This is a factory for OpenGL 3.3 CORE <br>
  * it is made so you can implement and upgrade things easier
  * @since alpha 0.1.0
  */
+// TODO: add GL33 stuff
 @SuppressWarnings("unused")
 public final class GLW {
 
