@@ -17,3 +17,4 @@
 ## Features
 
 - Launching a window
+- GUI
