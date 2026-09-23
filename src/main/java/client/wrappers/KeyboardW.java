@@ -48,9 +48,9 @@ public class KeyboardW {
     public static final int KEY_X = GLFW_KEY_X;
     public static final int KEY_Y = GLFW_KEY_Y;
     public static final int KEY_Z = GLFW_KEY_Z;
-    public static final int KEY_LBRACKET = GLFW_KEY_LEFT_BRACKET;
+    public static final int KEY_LEFT_BRACKET = GLFW_KEY_LEFT_BRACKET;
     public static final int KEY_BACKSLASH = GLFW_KEY_BACKSLASH;
-    public static final int KEY_RBRACKET= GLFW_KEY_RIGHT_BRACKET;
+    public static final int KEY_RIGHT_BRACKET= GLFW_KEY_RIGHT_BRACKET;
     public static final int KEY_GRAVE_ACCENT = GLFW_KEY_GRAVE_ACCENT;
     public static final int KEY_WORLD1 = GLFW_KEY_WORLD_1;
     public static final int KEY_WORLD2 = GLFW_KEY_WORLD_2;
@@ -105,14 +105,14 @@ public class KeyboardW {
     public static final int KEY_NUMPAD_ENTER = GLFW_KEY_KP_ENTER;
     public static final int KEY_NUMPAD_EQUAL = GLFW_KEY_KP_EQUAL;
     // numpad end
-    public static final int KEY_LSHIFT = GLFW_KEY_LEFT_SHIFT;
-    public static final int KEY_LCTRL = GLFW_KEY_LEFT_CONTROL;
-    public static final int KEY_LALT = GLFW_KEY_LEFT_ALT;
-    public static final int KEY_LSUPER = GLFW_KEY_LEFT_SUPER;
-    public static final int KEY_RSHIFT = GLFW_KEY_RIGHT_SHIFT;
-    public static final int KEY_RCTRL = GLFW_KEY_RIGHT_CONTROL;
-    public static final int KEY_RALT = GLFW_KEY_RIGHT_ALT;
-    public static final int KEY_RSUPER = GLFW_KEY_RIGHT_SUPER;
+    public static final int KEY_LEFT_SHIFT = GLFW_KEY_LEFT_SHIFT;
+    public static final int KEY_LEFT_CTRL = GLFW_KEY_LEFT_CONTROL;
+    public static final int KEY_LEFT_ALT = GLFW_KEY_LEFT_ALT;
+    public static final int KEY_LEFT_SUPER = GLFW_KEY_LEFT_SUPER;
+    public static final int KEY_RIGHT_SHIFT = GLFW_KEY_RIGHT_SHIFT;
+    public static final int KEY_RIGHT_CTRL = GLFW_KEY_RIGHT_CONTROL;
+    public static final int KEY_RIGHT_ALT = GLFW_KEY_RIGHT_ALT;
+    public static final int KEY_RIGHT_SUPER = GLFW_KEY_RIGHT_SUPER;
     public static final int KEY_MENU = GLFW_KEY_MENU;
     public static final int KEY_LAST = GLFW_KEY_LAST;
 }
