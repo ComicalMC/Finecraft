@@ -52,7 +52,7 @@ public class Minecraft {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE); // Required for macOS support
 
-        window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Finecraft 0.2.0-alpha", NULL, NULL);
+        window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Finecraft 0.2.1-alpha-dev1", NULL, NULL);
         if (window == NULL) {
             throw new RuntimeException("Failed to create the GLFW window");
         }
