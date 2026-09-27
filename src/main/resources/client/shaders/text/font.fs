@@ -6,7 +6,11 @@ uniform sampler2D textTexture;
 uniform vec4 textColor;
 
 void main() {
-    // Sample texture alpha directly to tint standard uniforms safely
-    vec4 sampled = texture(textTexture, TexCoords);
-    outColor = textColor * vec4(1.0, 1.0, 1.0, sampled.a);
+    float alpha = texture(textTexture, TexCoords).a;
+
+    if (alpha <= 0.001) {
+        discard;
+    }
+
+    outColor = vec4(textColor.rgb, textColor.a * alpha);
 }

@@ -19,13 +19,16 @@ public final class TexturedRect {
 
     private final int textureId;
     private final int x, y, sizeX, sizeY;
+    private final float repeatX, repeatY;
 
-    private TexturedRect(int textureId, int x, int y, int sizeX, int sizeY) {
+    private TexturedRect(int textureId, int x, int y, int sizeX, int sizeY, float repeatX, float repeatY) {
         this.textureId = textureId;
         this.x = x;
         this.y = y;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
+        this.repeatX = repeatX;
+        this.repeatY = repeatY;
     }
 
     /**
@@ -36,7 +39,26 @@ public final class TexturedRect {
      * @param sizeY     height to draw at, in pixels
      */
     public static TexturedRect sprite(int textureId, int x, int y, int sizeX, int sizeY) {
-        return new TexturedRect(textureId, x, y, sizeX, sizeY);
+        return new TexturedRect(textureId, x, y, sizeX, sizeY, 1f, 1f);
+    }
+
+    /**
+     * A textured rect that repeats a small texture across its area instead of stretching
+     * it, e.g. a 16x16 dirt tile filling the whole window. Relies on the texture's wrap
+     * mode being {@code GL_REPEAT} (the default set by {@link client.Textures}).
+     *
+     * @param textureId   a GL texture id, as returned by {@link client.Textures#loadTexture}
+     * @param x           top-left X position, in pixels
+     * @param y           top-left Y position, in pixels
+     * @param sizeX       width to draw at, in pixels
+     * @param sizeY       height to draw at, in pixels
+     * @param tileWidth   width of one tile of the source texture, in pixels
+     * @param tileHeight  height of one tile of the source texture, in pixels
+     */
+    public static TexturedRect tiled(int textureId, int x, int y, int sizeX, int sizeY, int tileWidth, int tileHeight) {
+        float repeatX = (float) sizeX / tileWidth;
+        float repeatY = (float) sizeY / tileHeight;
+        return new TexturedRect(textureId, x, y, sizeX, sizeY, repeatX, repeatY);
     }
 
     // rendering
@@ -139,12 +161,12 @@ public final class TexturedRect {
         float x0 = x, y0 = y, x1 = x + sizeX, y1 = y + sizeY;
         float[] vertices = {
                 // pos          // texCoords
-                x0, y1,         0f, 1f,
+                x0, y1,         0f, repeatY,
                 x0, y0,         0f, 0f,
-                x1, y0,         1f, 0f,
-                x0, y1,         0f, 1f,
-                x1, y0,         1f, 0f,
-                x1, y1,         1f, 1f
+                x1, y0,         repeatX, 0f,
+                x0, y1,         0f, repeatY,
+                x1, y0,         repeatX, 0f,
+                x1, y1,         repeatX, repeatY
         };
 
         try (MemoryStack stack = MemoryStack.stackPush()) {

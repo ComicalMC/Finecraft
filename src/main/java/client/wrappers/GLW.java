@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL33;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -16,7 +17,6 @@ import java.nio.IntBuffer;
  * it is made so you can implement and upgrade things easier
  * @since alpha 0.1.0
  */
-// TODO: add GL33 stuff
 @SuppressWarnings("unused")
 public final class GLW {
 
@@ -175,4 +175,20 @@ public final class GLW {
     // multitexture
     public static final int TEXTURE0 = GL13.GL_TEXTURE0;
     public static void activeTexture(int unit) { GL13.glActiveTexture(unit); }
+
+    // instanced rendering: one attribute value per instance instead of per vertex,
+    // e.g. to draw many block quads in one draw call
+    public static void vertexAttribDivisor(int index, int divisor) { GL33.glVertexAttribDivisor(index, divisor); }
+
+    // sampler objects: reuse the same texture filtering/wrapping setup across
+    // different textures without touching each texture's own parameters
+    public static int genSampler() { return GL33.glGenSamplers(); }
+    public static void deleteSampler(int id) { GL33.glDeleteSamplers(id); }
+    public static void bindSampler(int unit, int sampler) { GL33.glBindSampler(unit, sampler); }
+    public static void samplerParameteri(int sampler, int pname, int value) { GL33.glSamplerParameteri(sampler, pname, value); }
+
+    // explicit fragment output binding (needed for dual-source blending)
+    public static void bindFragDataLocationIndexed(int program, int colorNumber, int index, CharSequence name) {
+        GL33.glBindFragDataLocationIndexed(program, colorNumber, index, name);
+    }
 }

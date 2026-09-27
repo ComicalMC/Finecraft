@@ -64,6 +64,14 @@ public class Minecraft {
             }
         });
 
+        glfwSetFramebufferSizeCallback(window, (window, newWidth, newHeight) -> {
+            if (newWidth <= 0 || newHeight <= 0) return; // e.g. window minimized
+            glViewport(0, 0, newWidth, newHeight);
+            if (currentScreen != null) {
+                currentScreen.resize(newWidth, newHeight);
+            }
+        });
+
         // Forward left-click releases to whichever screen is showing
         glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
             if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
@@ -123,7 +131,7 @@ public class Minecraft {
     /** Swaps the active GUI screen, e.g. {@code Minecraft.mc.setScreen(new OptionsScreen(...))}. */
     public void setScreen(Screen screen) {
         if (currentScreen != null) {
-            currentScreen.dispose(); // free the outgoing screen's resources (e.g. MainMenu's background texture) since we no longer keep it around as "previous"
+            currentScreen.dispose();
         }
         this.currentScreen = screen;
     }
@@ -149,6 +157,7 @@ public class Minecraft {
             currentScreen.dispose();
         }
         fontRenderer.cleanup();
+        Textures.clearCache();
 
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);

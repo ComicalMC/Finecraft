@@ -122,19 +122,26 @@ public class FontRenderer {
         int tex = GL33.glGenTextures();
         GL33.glBindTexture(GL33.GL_TEXTURE_2D, tex);
 
+        GL33.glPixelStorei(GL33.GL_UNPACK_ALIGNMENT, 1);
+
         GL33.glTexParameteri(GL33.GL_TEXTURE_2D, GL33.GL_TEXTURE_MIN_FILTER, GL33.GL_NEAREST);
         GL33.glTexParameteri(GL33.GL_TEXTURE_2D, GL33.GL_TEXTURE_MAG_FILTER, GL33.GL_NEAREST);
         GL33.glTexParameteri(GL33.GL_TEXTURE_2D, GL33.GL_TEXTURE_WRAP_S, GL33.GL_CLAMP_TO_EDGE);
         GL33.glTexParameteri(GL33.GL_TEXTURE_2D, GL33.GL_TEXTURE_WRAP_T, GL33.GL_CLAMP_TO_EDGE);
 
-        GL33.glTexImage2D(GL33.GL_TEXTURE_2D, 0, GL33.GL_RGBA, w, h, 0, GL33.GL_RGBA, GL33.GL_UNSIGNED_BYTE, buffer);
+        GL33.glTexImage2D(GL33.GL_TEXTURE_2D, 0, GL33.GL_RGBA8, w, h, 0, GL33.GL_RGBA, GL33.GL_UNSIGNED_BYTE, buffer);
         GL33.glBindTexture(GL33.GL_TEXTURE_2D, 0);
 
-        MemoryUtil.memFree(buffer); // Prevent off-heap system leaks
+        GL33.glPixelStorei(GL33.GL_UNPACK_ALIGNMENT, 4);
+
+        MemoryUtil.memFree(buffer);
         return tex;
     }
 
     public void drawString(String text, int x, int y, float r, float g, float b, float a) {
+        GL33.glEnable(GL33.GL_BLEND);
+        GL33.glBlendFunc(GL33.GL_SRC_ALPHA, GL33.GL_ONE_MINUS_SRC_ALPHA);
+
         GL33.glUseProgram(shaderProgram);
 
         // Retrieve current viewport dimension sizes natively to assemble projection arrays
@@ -164,6 +171,7 @@ public class FontRenderer {
 
         GL33.glActiveTexture(GL33.GL_TEXTURE0);
         GL33.glBindTexture(GL33.GL_TEXTURE_2D, textureId);
+        GL33.glUniform1i(GL33.glGetUniformLocation(shaderProgram, "textTexture"), 0);
         GL33.glBindVertexArray(vao);
 
         int cx = x;
@@ -212,6 +220,8 @@ public class FontRenderer {
 
         GL33.glBindVertexArray(0);
         GL33.glBindTexture(GL33.GL_TEXTURE_2D, 0);
+        GL33.glUseProgram(0);
+        GL33.glDisable(GL33.GL_BLEND);
     }
 
     public void drawString(String text, int x, int y) {
