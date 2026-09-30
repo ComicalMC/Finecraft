@@ -1,28 +1,31 @@
-package client.gui.screens;
+package client.gui.screens.options;
 
 import client.FontRenderer;
 import client.Minecraft;
 import client.Textures;
 import client.gui.factory.button.Button;
 import client.gui.factory.texture.TexturedRect;
-import client.gui.screens.options.OptionsScreen;
+import client.gui.screens.MainMenu;
+import client.gui.screens.Screen;
 import client.gui.screens.options.video.VideoScreen;
 
 import java.awt.Color;
 
 import static org.lwjgl.opengl.GL11.GL_LINEAR;
 
-public class MainMenu extends Screen {
+/**
+ * This is a screen for the options menu
+ */
+public class OptionsScreen extends Screen {
+
     private static final int BACKGROUND_TILE_SIZE = 16;
 
-    private final Minecraft minecraft;
     private int windowWidth;
     private int windowHeight;
     private final int backgroundTexture;
     private TexturedRect background;
 
-    public MainMenu(Minecraft minecraft, int windowWidth, int windowHeight) {
-        this.minecraft = minecraft;
+    public OptionsScreen(int windowWidth, int windowHeight) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
         this.backgroundTexture = Textures.loadTexture("/client/gui/background/background.png", GL_LINEAR);
@@ -35,15 +38,13 @@ public class MainMenu extends Screen {
         this.background = TexturedRect.tiled(backgroundTexture, 0, 0, windowWidth, windowHeight, BACKGROUND_TILE_SIZE, BACKGROUND_TILE_SIZE);
 
         int buttonWidth = 200;
-        int buttonHeight = 26;
+        int buttonHeight = 20;
         int centerX = windowWidth / 2 - buttonWidth / 2;
-        int startY = windowHeight / 2 - 20;
-        int spacing = 30;
-
-        addButton(Button.button(this::singleplayer, "Singleplayer", centerX, startY, buttonWidth, buttonHeight));
-        addButton(Button.button(this::multiplayer, "Multiplayer", centerX, startY + spacing, buttonWidth, buttonHeight));
-        addButton(Button.button(this::options, "Options", centerX, startY + spacing * 2, buttonWidth, buttonHeight));
-        addButton(Button.button(minecraft::stop, "Quit", centerX, startY + spacing * 3, buttonWidth, buttonHeight, "#AA0000FF"));
+        int y = windowHeight / 2 + 60;
+        int spacing = 24;
+        addButton(Button.button(this::VideoScreenRef, "Video settings", centerX, y - spacing * 2, buttonWidth, buttonHeight));
+        addButton(Button.button(this::toggleVsync, vsyncLabel(), centerX, y - spacing, buttonWidth, buttonHeight));
+        addButton(Button.button(this::done, "Back", centerX, y, buttonWidth, buttonHeight));
     }
 
     @Override
@@ -53,35 +54,28 @@ public class MainMenu extends Screen {
         layout();
     }
 
-    // TODO: Add singleplayer & multiplayer screens
-    private void singleplayer() {
-        System.out.println("Singleplayer isn't done");
+    private String vsyncLabel() {
+        return "VSync: " + (Minecraft.mc.isVsyncEnabled() ? "ON" : "OFF");
     }
 
-    private void multiplayer() {
-        System.out.println("Multiplayer isn't done");
+    private void toggleVsync() {
+        Minecraft.mc.setVsync(!Minecraft.mc.isVsyncEnabled());
+        layout();
     }
+    private void VideoScreenRef() {Minecraft.mc.setScreen(new VideoScreen(windowWidth, windowHeight));}
 
-    private void options() {
-        Minecraft.mc.setScreen(new OptionsScreen(windowWidth, windowHeight));
+    private void done() {
+        Minecraft.mc.setScreen(new MainMenu(Minecraft.mc, windowWidth, windowHeight));
     }
 
     @Override
     public void render(FontRenderer fontRenderer, long window) {
         background.render();
 
-        String title = "Finecraft";
+        String title = "Options";
         int titleWidth = fontRenderer.getStringWidth(title);
         fontRenderer.drawString(title, (windowWidth - titleWidth) / 2, 60, Color.WHITE, true);
 
         renderButtons(fontRenderer, window);
     }
-
-    @Override
-    public void mouseClicked(double mouseX, double mouseY) {
-        super.mouseClicked(mouseX, mouseY);
-    }
-
-    @Override
-    public void dispose() {}
 }

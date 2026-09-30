@@ -61,9 +61,9 @@ public final class Button {
         this.y = y;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
-        this.color = hexColor != null ? parseHex(hexColor) : defaultColor.clone();
+        this.color = hexColor != null && !hexColor.isEmpty() ? parseHex(hexColor) : defaultColor.clone();
         this.borderEnabled = borderEnabled;
-        this.borderColor = hexBorderColor != null ? parseHex(hexBorderColor) : defaultBorderColor.clone();
+        this.borderColor = hexBorderColor != null && !hexBorderColor.isEmpty() ? parseHex(hexBorderColor) : defaultBorderColor.clone();
     }
 
     // create a button with the color gray and a border
