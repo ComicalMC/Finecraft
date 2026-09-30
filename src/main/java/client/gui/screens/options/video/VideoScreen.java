@@ -39,9 +39,9 @@ public class VideoScreen extends Screen {
         int buttonHeight = 20;
         int centerX = windowWidth / 2 - buttonWidth / 2;
         int y = windowHeight / 2 + 60;
-        int spacing = 24;
-        addButton(Button.button(this::no_op, "coming soon", centerX, y, buttonWidth, buttonHeight));
-        addButton(Button.button(this::back, "back", centerX, y - spacing, buttonWidth, buttonHeight));
+        int spacing = 26;
+        addButton(Button.button(this::no_op, "coming soon", centerX, y - spacing, buttonWidth, buttonHeight));
+        addButton(Button.button(this::back, "back", centerX, y, buttonWidth, buttonHeight));
     }
     private void no_op() {}
     private void back() {

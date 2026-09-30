@@ -1,4 +1,4 @@
-package client.gui.screens.options.audio;
+package client.gui.screens.play;
 
 import client.FontRenderer;
 import client.Minecraft;
@@ -8,21 +8,19 @@ import client.gui.factory.texture.TexturedRect;
 import client.gui.screens.MainMenu;
 import client.gui.screens.Screen;
 
-import java.awt.*;
-
 import static org.lwjgl.opengl.GL11.GL_LINEAR;
 
 /**
- * This is a screen for audio configuration stuff
+ * Multiplayer Screen
  */
-public class AudioScreen extends Screen {
+public class MultiplayerScreen extends Screen {
     private static final int BACKGROUND_TILE_SIZE = 16;
 
     private int windowWidth;
     private int windowHeight;
     private final int backgroundTexture;
     private TexturedRect background;
-    public AudioScreen(int windowWidth, int windowHeight) {
+    public MultiplayerScreen(int windowWidth, int windowHeight) {
 
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
@@ -50,10 +48,6 @@ public class AudioScreen extends Screen {
     @Override
     public void render(FontRenderer fontRenderer, long window) {
         background.render();
-
-        String title = "Audio Options";
-        int titleWidth = fontRenderer.getStringWidth(title);
-        fontRenderer.drawString(title, (windowWidth - titleWidth) / 2, 60, Color.WHITE, true);
 
         renderButtons(fontRenderer, window);
     }

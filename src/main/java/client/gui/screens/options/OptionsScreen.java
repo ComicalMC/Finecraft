@@ -7,6 +7,7 @@ import client.gui.factory.button.Button;
 import client.gui.factory.texture.TexturedRect;
 import client.gui.screens.MainMenu;
 import client.gui.screens.Screen;
+import client.gui.screens.options.audio.AudioScreen;
 import client.gui.screens.options.video.VideoScreen;
 
 import java.awt.Color;
@@ -41,7 +42,8 @@ public class OptionsScreen extends Screen {
         int buttonHeight = 20;
         int centerX = windowWidth / 2 - buttonWidth / 2;
         int y = windowHeight / 2 + 60;
-        int spacing = 24;
+        int spacing = 26;
+        addButton(Button.button(this::AudioScreenRef, "Audio settings", centerX, y - spacing * 3, buttonWidth, buttonHeight));
         addButton(Button.button(this::VideoScreenRef, "Video settings", centerX, y - spacing * 2, buttonWidth, buttonHeight));
         addButton(Button.button(this::toggleVsync, vsyncLabel(), centerX, y - spacing, buttonWidth, buttonHeight));
         addButton(Button.button(this::done, "Back", centerX, y, buttonWidth, buttonHeight));
@@ -63,6 +65,8 @@ public class OptionsScreen extends Screen {
         layout();
     }
     private void VideoScreenRef() {Minecraft.mc.setScreen(new VideoScreen(windowWidth, windowHeight));}
+
+    private  void AudioScreenRef() {Minecraft.mc.setScreen((new AudioScreen(windowWidth, windowHeight)));}
 
     private void done() {
         Minecraft.mc.setScreen(new MainMenu(Minecraft.mc, windowWidth, windowHeight));

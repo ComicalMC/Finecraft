@@ -7,6 +7,8 @@ import client.gui.factory.button.Button;
 import client.gui.factory.texture.TexturedRect;
 import client.gui.screens.options.OptionsScreen;
 import client.gui.screens.options.video.VideoScreen;
+import client.gui.screens.play.MultiplayerScreen;
+import client.gui.screens.play.SingleplayerScreen;
 
 import java.awt.Color;
 
@@ -38,7 +40,7 @@ public class MainMenu extends Screen {
         int buttonHeight = 26;
         int centerX = windowWidth / 2 - buttonWidth / 2;
         int startY = windowHeight / 2 - 20;
-        int spacing = 30;
+        int spacing = 26;
 
         addButton(Button.button(this::singleplayer, "Singleplayer", centerX, startY, buttonWidth, buttonHeight));
         addButton(Button.button(this::multiplayer, "Multiplayer", centerX, startY + spacing, buttonWidth, buttonHeight));
@@ -53,14 +55,11 @@ public class MainMenu extends Screen {
         layout();
     }
 
-    // TODO: Add singleplayer & multiplayer screens
     private void singleplayer() {
-        System.out.println("Singleplayer isn't done");
+        Minecraft.mc.setScreen(new SingleplayerScreen(windowWidth,windowHeight));
     }
 
-    private void multiplayer() {
-        System.out.println("Multiplayer isn't done");
-    }
+    private void multiplayer() { Minecraft.mc.setScreen(new MultiplayerScreen(windowWidth,windowHeight));}
 
     private void options() {
         Minecraft.mc.setScreen(new OptionsScreen(windowWidth, windowHeight));
